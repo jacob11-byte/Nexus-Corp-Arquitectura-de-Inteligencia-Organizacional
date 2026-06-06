@@ -10,9 +10,13 @@
     {% if active != 'login' %}
     <aside class="sidebar">
         <div class="brand">
-            <span class="brand-mark">NC</span>
+            {% if empresa.logo %}
+                <img class="brand-logo" src="{{ url_for('static', filename='uploads/' ~ empresa.logo) }}" alt="Logo de {{ empresa.nombre }}">
+            {% else %}
+                <span class="brand-mark">NC</span>
+            {% endif %}
             <div>
-                <strong>Nexus-Corp</strong>
+                <strong>{{ empresa.nombre }}</strong>
                 <small>SDBCC</small>
             </div>
         </div>

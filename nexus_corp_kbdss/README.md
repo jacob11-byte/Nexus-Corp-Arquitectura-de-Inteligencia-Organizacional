@@ -56,6 +56,10 @@ Cada rol ve solo los módulos que le corresponden. El administrador puede gestio
 
 El archivo `data/usuarios.xml` almacena usuarios, roles, áreas y estado de acceso. Las contraseñas se guardan como resumen SHA-256 para el prototipo. El archivo `data/auditoria.xml` registra acciones importantes como inicio de sesión, creación de reglas, evaluación de decisiones, retroalimentación y creación de usuarios.
 
+## Imagen corporativa
+
+El administrador puede subir el logo o imagen de la empresa desde el módulo `Usuarios`. La imagen se guarda en `static/uploads/` y la referencia queda registrada en `data/configuracion.xml`. El logo aparece automáticamente en el inicio de sesión y en el menú lateral del sistema.
+
 ## Base de datos recomendada
 
 La base de datos recomendada es SQLite. Se integraría como un archivo local en `data/nexus_corp.db`, usando un módulo nuevo llamado `repositorio_datos.py` para centralizar consultas y registros. La propuesta completa está en `PROPUESTA_BASE_DATOS.md`.

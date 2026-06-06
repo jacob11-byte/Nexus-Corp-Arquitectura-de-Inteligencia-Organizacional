@@ -2,6 +2,29 @@
 {% block title %}Usuarios y roles{% endblock %}
 
 {% block content %}
+<section class="section-panel company-panel">
+    <div class="section-heading">
+        <h2>Imagen corporativa</h2>
+        <span class="count">Empresa</span>
+    </div>
+    <form class="company-form" method="post" action="{{ url_for('empresa_imagen') }}" enctype="multipart/form-data">
+        <div class="company-preview">
+            {% if empresa_config.logo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ empresa_config.logo) }}" alt="Logo de {{ empresa_config.nombre }}">
+            {% else %}
+                <span class="brand-mark">NC</span>
+            {% endif %}
+        </div>
+        <label>Nombre de la empresa
+            <input name="nombre_empresa" required value="{{ empresa_config.nombre }}">
+        </label>
+        <label>Logo o imagen
+            <input type="file" name="logo" accept="image/png,image/jpeg,image/gif,image/webp">
+        </label>
+        <button type="submit">Guardar imagen</button>
+    </form>
+</section>
+
 <section class="grid-two">
     <form class="form-card needs-validation" method="post">
         <h2>Nuevo usuario</h2>

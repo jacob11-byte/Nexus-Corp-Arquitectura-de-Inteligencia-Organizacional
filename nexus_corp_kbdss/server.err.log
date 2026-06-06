@@ -43,3 +43,58 @@ Press CTRL+C to quit
  * Debugger is active!
  * Debugger PIN: 121-732-337
 127.0.0.1 - - [05/Jun/2026 19:51:23] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:57:49] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [05/Jun/2026 19:57:49] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:57:49] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:57:49] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:14] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [05/Jun/2026 19:58:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:14] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:14] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:25] "GET /usuarios HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:25] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:25] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:28] "GET /reglas HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:28] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:28] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:34] "GET /evaluar HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:34] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:34] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:40] "GET /whatif HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:40] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:40] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:44] "GET /retroalimentacion HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:44] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:44] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:51] "GET /reportes HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:51] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:51] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:52] "GET /auditoria HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:52] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:52] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:57] "GET /reportes HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:57] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:57] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:58] "GET /retroalimentacion HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:58] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:58] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:59] "GET /whatif HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:58:59] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:58:59] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:00] "GET /evaluar HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:59:00] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:00] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:01] "GET /reglas HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:59:01] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:01] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:02] "GET /usuarios HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:59:02] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:02] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:59:03] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:59:03] "GET /static/js/script.js HTTP/1.1" 304 -
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+127.0.0.1 - - [05/Jun/2026 20:04:31] "GET /login HTTP/1.1" 200 -

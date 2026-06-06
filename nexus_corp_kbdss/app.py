@@ -11,6 +11,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+from werkzeug.utils import secure_filename
 
 from motor_reglas import cargar_reglas, evaluar_decision
 
@@ -25,12 +26,15 @@ DECISIONES_XML = DATA_DIR / "decisiones.xml"
 RETRO_XML = DATA_DIR / "retroalimentacion.xml"
 USUARIOS_XML = DATA_DIR / "usuarios.xml"
 AUDITORIA_XML = DATA_DIR / "auditoria.xml"
+CONFIG_XML = DATA_DIR / "configuracion.xml"
+UPLOAD_DIR = BASE_DIR / "static" / "uploads"
 
 
 AREAS = ["Ventas", "Inventario", "Logística", "Finanzas", "Atención al cliente", "Gerencia"]
 OPERADORES = ["menor que", "mayor que", "igual a", "contiene"]
 PRIORIDADES = ["Baja", "Media", "Alta"]
 ESTADOS_REGLA = ["Activa", "En revisión", "Actualizada", "Descartada", "Inactiva"]
+EXTENSIONES_IMAGEN = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 ROLES = [
     "Administrador del sistema",
     "Administrador de conocimiento",
@@ -190,9 +194,46 @@ def obtener_auditorias():
     return list(reversed(eventos))
 
 
+def obtener_configuracion_empresa():
+    """Lee la configuración visual de la empresa."""
+    tree = leer_xml(CONFIG_XML, "configuracion")
+    root = tree.getroot()
+    empresa = root.find("empresa")
+    if empresa is None:
+        empresa = ET.SubElement(root, "empresa")
+        ET.SubElement(empresa, "nombre").text = "Nexus-Corp"
+        ET.SubElement(empresa, "logo").text = ""
+        guardar_xml(tree, CONFIG_XML)
+
+    return {
+        "nombre": empresa.findtext("nombre", default="Nexus-Corp"),
+        "logo": empresa.findtext("logo", default=""),
+    }
+
+
+def guardar_configuracion_empresa(nombre, logo):
+    tree = leer_xml(CONFIG_XML, "configuracion")
+    root = tree.getroot()
+    empresa = root.find("empresa")
+    if empresa is None:
+        empresa = ET.SubElement(root, "empresa")
+
+    for etiqueta, valor in {"nombre": nombre, "logo": logo}.items():
+        nodo = empresa.find(etiqueta)
+        if nodo is None:
+            nodo = ET.SubElement(empresa, etiqueta)
+        nodo.text = valor
+
+    guardar_xml(tree, CONFIG_XML)
+
+
 @app.context_processor
 def contexto_usuario():
-    return {"usuario_actual": usuario_actual(), "puede": puede}
+    return {
+        "usuario_actual": usuario_actual(),
+        "puede": puede,
+        "empresa": obtener_configuracion_empresa(),
+    }
 
 
 def obtener_decisiones():
@@ -602,7 +643,34 @@ def usuarios():
         usuarios=obtener_usuarios(),
         roles=ROLES,
         areas=AREAS,
+        empresa_config=obtener_configuracion_empresa(),
     )
+
+
+@app.route("/empresa-imagen", methods=["POST"])
+@requiere_login
+@requiere_permiso("usuarios")
+def empresa_imagen():
+    nombre_empresa = request.form.get("nombre_empresa", "Nexus-Corp").strip() or "Nexus-Corp"
+    configuracion_actual = obtener_configuracion_empresa()
+    archivo = request.files.get("logo")
+    nombre_logo = configuracion_actual["logo"]
+
+    if archivo and archivo.filename:
+        extension = Path(archivo.filename).suffix.lower()
+        if extension not in EXTENSIONES_IMAGEN:
+            flash("Formato de imagen no permitido. Use PNG, JPG, GIF o WEBP.", "error")
+            return redirect(url_for("usuarios"))
+
+        UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+        nombre_seguro = secure_filename(archivo.filename)
+        nombre_logo = f"empresa_{datetime.now().strftime('%Y%m%d%H%M%S')}_{nombre_seguro}"
+        archivo.save(UPLOAD_DIR / nombre_logo)
+
+    guardar_configuracion_empresa(nombre_empresa, nombre_logo)
+    registrar_auditoria("Actualización de imagen corporativa", nombre_empresa)
+    flash("Imagen corporativa actualizada correctamente.", "success")
+    return redirect(url_for("usuarios"))
 
 
 @app.route("/auditoria")
