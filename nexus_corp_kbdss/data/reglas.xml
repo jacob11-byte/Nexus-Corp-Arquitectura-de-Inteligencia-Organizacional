@@ -6,7 +6,7 @@
         <variable>stock_actual</variable>
         <operador>menor que</operador>
         <valor>20</valor>
-        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario esta por debajo del nivel minimo.</recomendacion>
+        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario está por debajo del nivel mínimo.</recomendacion>
         <prioridad>Alta</prioridad>
     </regla>
     <regla id="2">
@@ -20,11 +20,11 @@
     </regla>
     <regla id="3">
         <nombre>Retrasos frecuentes en ruta</nombre>
-        <area>Logistica</area>
+        <area>Logística</area>
         <variable>retrasos_ruta</variable>
         <operador>mayor que</operador>
         <valor>3</valor>
-        <recomendacion>Evaluar una ruta alternativa debido a retrasos frecuentes en la distribucion.</recomendacion>
+        <recomendacion>Evaluar una ruta alternativa debido a retrasos frecuentes en la distribución.</recomendacion>
         <prioridad>Alta</prioridad>
     </regla>
     <regla id="4">
@@ -33,7 +33,7 @@
         <variable>gasto_mensual</variable>
         <operador>mayor que</operador>
         <valor>10000</valor>
-        <recomendacion>Revisar el presupuesto del area porque los gastos superan el limite establecido.</recomendacion>
+        <recomendacion>Revisar el presupuesto del área porque los gastos superan el límite establecido.</recomendacion>
         <prioridad>Media</prioridad>
     </regla>
 </reglas>

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Retroalimentacion{% endblock %}
+{% block title %}Retroalimentación{% endblock %}
 
 {% block content %}
 <section class="grid-two">
     <form class="form-card needs-validation" method="post">
-        <h2>Calificar recomendacion</h2>
-        <label>Decision evaluada
+        <h2>Calificar recomendación</h2>
+        <label>Decisión evaluada
             <select name="decision_id" required>
                 {% for decision in decisiones %}
                     <option value="{{ decision.id }}" {{ 'selected' if request.args.get('decision_id') == decision.id else '' }}>
@@ -14,19 +14,19 @@
                 {% endfor %}
             </select>
         </label>
-        <label>Calificacion de utilidad
+        <label>Calificación de utilidad
             <select name="calificacion" required>
-                <option value="5">5 - Muy util</option>
-                <option value="4">4 - Util</option>
+                <option value="5">5 - Muy útil</option>
+                <option value="4">4 - Útil</option>
                 <option value="3">3 - Aceptable</option>
-                <option value="2">2 - Poco util</option>
-                <option value="1">1 - No util</option>
+                <option value="2">2 - Poco útil</option>
+                <option value="1">1 - No útil</option>
             </select>
         </label>
         <label>Comentario
-            <textarea name="comentario" rows="4" required placeholder="Explique si la recomendacion ayudo a la decision"></textarea>
+            <textarea name="comentario" rows="4" required placeholder="Explique si la recomendación ayudó a la decisión"></textarea>
         </label>
-        <button type="submit">Guardar retroalimentacion</button>
+        <button type="submit">Guardar retroalimentación</button>
     </form>
 
     <section class="section-panel">
@@ -37,12 +37,12 @@
         <div class="feedback-list">
             {% for item in retroalimentaciones %}
                 <article class="feedback-item">
-                    <strong>Decision #{{ item.decision_id }} - {{ item.calificacion }}/5</strong>
+                    <strong>Decisión #{{ item.decision_id }} - {{ item.calificacion }}/5</strong>
                     <span>{{ item.fecha }}</span>
                     <p>{{ item.comentario }}</p>
                 </article>
             {% else %}
-                <p class="empty">Aun no hay retroalimentaciones registradas.</p>
+                <p class="empty">Aún no hay retroalimentaciones registradas.</p>
             {% endfor %}
         </div>
     </section>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nexus-Corp KBDSS</title>
+    <title>Nexus-Corp SDBCC</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -12,15 +12,15 @@
             <span class="brand-mark">NC</span>
             <div>
                 <strong>Nexus-Corp</strong>
-                <small>KBDSS</small>
+                <small>SDBCC</small>
             </div>
         </div>
         <nav class="nav">
-            <a class="{{ 'active' if active == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a class="{{ 'active' if active == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Tablero</a>
             <a class="{{ 'active' if active == 'reglas' else '' }}" href="{{ url_for('reglas') }}">Reglas</a>
-            <a class="{{ 'active' if active == 'evaluar' else '' }}" href="{{ url_for('evaluar') }}">Evaluar decision</a>
-            <a class="{{ 'active' if active == 'whatif' else '' }}" href="{{ url_for('whatif') }}">What-if</a>
-            <a class="{{ 'active' if active == 'retroalimentacion' else '' }}" href="{{ url_for('retroalimentacion') }}">Retroalimentacion</a>
+            <a class="{{ 'active' if active == 'evaluar' else '' }}" href="{{ url_for('evaluar') }}">Evaluar decisión</a>
+            <a class="{{ 'active' if active == 'whatif' else '' }}" href="{{ url_for('whatif') }}">Escenarios</a>
+            <a class="{{ 'active' if active == 'retroalimentacion' else '' }}" href="{{ url_for('retroalimentacion') }}">Retroalimentación</a>
             <a class="{{ 'active' if active == 'reportes' else '' }}" href="{{ url_for('reportes') }}">Reportes</a>
         </nav>
     </aside>
@@ -29,7 +29,7 @@
         <header class="topbar">
             <div>
                 <p class="eyebrow">Arquitectura de Inteligencia Organizacional</p>
-                <h1>{% block title %}Nexus-Corp KBDSS{% endblock %}</h1>
+                <h1>{% block title %}Nexus-Corp SDBCC{% endblock %}</h1>
             </div>
             <span class="status-pill">Prototipo universitario</span>
         </header>
@@ -47,6 +47,7 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% block scripts %}{% endblock %}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

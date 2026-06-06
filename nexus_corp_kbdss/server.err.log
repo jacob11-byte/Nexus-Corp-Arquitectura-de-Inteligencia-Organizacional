@@ -4,4 +4,4 @@ Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 121-732-337
-127.0.0.1 - - [05/Jun/2026 19:11:13] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:31:31] "GET /?fecha_inicio=2026-06-01&fecha_fin=2026-06-30 HTTP/1.1" 200 -

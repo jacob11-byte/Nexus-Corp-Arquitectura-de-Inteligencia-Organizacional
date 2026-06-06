@@ -8,12 +8,12 @@
         <label>Nombre de la regla
             <input name="nombre" required placeholder="Ej. Inventario bajo">
         </label>
-        <label>Area de conocimiento
+        <label>Área de conocimiento
             <select name="area" required>
                 {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
             </select>
         </label>
-        <label>Condicion principal
+        <label>Condición principal
             <input name="variable" required placeholder="Ej. stock_actual">
         </label>
         <label>Operador
@@ -21,11 +21,11 @@
                 {% for operador in operadores %}<option value="{{ operador }}">{{ operador }}</option>{% endfor %}
             </select>
         </label>
-        <label>Valor de comparacion
+        <label>Valor de comparación
             <input name="valor" required placeholder="Ej. 20">
         </label>
-        <label>Recomendacion
-            <textarea name="recomendacion" required rows="4" placeholder="Accion sugerida para el gerente"></textarea>
+        <label>Recomendación
+            <textarea name="recomendacion" required rows="4" placeholder="Acción sugerida para el gerente"></textarea>
         </label>
         <label>Prioridad
             <select name="prioridad" required>
@@ -45,8 +45,8 @@
                 <thead>
                     <tr>
                         <th>Regla</th>
-                        <th>Area</th>
-                        <th>Condicion</th>
+                        <th>Área</th>
+                        <th>Condición</th>
                         <th>Prioridad</th>
                     </tr>
                 </thead>

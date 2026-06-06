@@ -1,10 +1,11 @@
-"""Motor de reglas para Nexus-Corp KBDSS.
+"""Motor de reglas para Nexus-Corp SDBCC.
 
-Este modulo lee la base de conocimiento XML, compara una situacion
+Este módulo lee la base de conocimiento XML, compara una situación
 ingresada por el usuario y devuelve las reglas aplicables.
 """
 
 from pathlib import Path
+import unicodedata
 import xml.etree.ElementTree as ET
 
 
@@ -14,7 +15,9 @@ REGLAS_XML = DATA_DIR / "reglas.xml"
 
 def _normalizar(texto):
     """Convierte texto a una forma simple para comparar valores."""
-    return (texto or "").strip().lower()
+    texto_limpio = (texto or "").strip().lower()
+    texto_limpio = unicodedata.normalize("NFD", texto_limpio)
+    return "".join(caracter for caracter in texto_limpio if unicodedata.category(caracter) != "Mn")
 
 
 def _convertir_numero(valor):
@@ -79,7 +82,7 @@ def comparar_valores(valor_actual, operador, valor_regla):
 
 
 def evaluar_decision(area, variable, valor_actual, ruta_xml=REGLAS_XML):
-    """Devuelve la primera regla aplicable para una situacion empresarial."""
+    """Devuelve la primera regla aplicable para una situación empresarial."""
     area_normalizada = _normalizar(area)
     variable_normalizada = _normalizar(variable)
 
@@ -100,5 +103,5 @@ def evaluar_decision(area, variable, valor_actual, ruta_xml=REGLAS_XML):
 
     return {
         "encontrada": False,
-        "mensaje": "No se encontro una regla aplicable para esta situacion.",
+        "mensaje": "No se encontró una regla aplicable para esta situación.",
     }

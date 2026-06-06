@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Analisis What-if{% endblock %}
+{% block title %}Análisis de escenarios{% endblock %}
 
 {% block content %}
 <section class="grid-two">
     <form class="form-card needs-validation" method="post">
         <h2>Simular escenario</h2>
-        <label>Area
+        <label>Área
             <select name="area" required>
                 {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
             </select>
@@ -23,7 +23,7 @@
     </form>
 
     <section class="result-panel">
-        <h2>Interpretacion</h2>
+        <h2>Interpretación</h2>
         {% if interpretacion %}
             <p class="recommendation">{{ interpretacion }}</p>
         {% else %}

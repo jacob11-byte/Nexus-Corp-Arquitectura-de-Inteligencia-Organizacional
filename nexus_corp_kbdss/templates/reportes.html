@@ -12,10 +12,10 @@
             <thead>
                 <tr>
                     <th>Fecha</th>
-                    <th>Area</th>
+                    <th>Área</th>
                     <th>Variable</th>
                     <th>Valor evaluado</th>
-                    <th>Recomendacion generada</th>
+                    <th>Recomendación generada</th>
                     <th>Prioridad</th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
                     <td><span class="priority {{ decision.prioridad|lower }}">{{ decision.prioridad }}</span></td>
                 </tr>
                 {% else %}
-                <tr><td colspan="6" class="empty">Aun no hay decisiones evaluadas.</td></tr>
+                <tr><td colspan="6" class="empty">Aún no hay decisiones evaluadas.</td></tr>
                 {% endfor %}
             </tbody>
         </table>

@@ -7,7 +7,7 @@
         <valor>15</valor>
         <observacion>Producto de alta rotacion en sucursal central.</observacion>
         <regla>Inventario bajo</regla>
-        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario esta por debajo del nivel minimo.</recomendacion>
+        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario está por debajo del nivel mínimo.</recomendacion>
         <prioridad>Alta</prioridad>
     </decision>
 </decisiones>

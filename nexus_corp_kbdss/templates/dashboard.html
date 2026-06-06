@@ -1,22 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Dashboard principal{% endblock %}
+{% block title %}Tablero principal{% endblock %}
 
 {% block content %}
 <section class="intro-panel">
     <div>
-        <h2>Nexus-Corp KBDSS</h2>
+        <h2>Nexus-Corp SDBCC</h2>
         <p>
-            Sistema de Gestion de Decisiones Basado en Conocimiento para capturar
-            experiencia empresarial, convertirla en reglas explicitas y generar
-            recomendaciones para gerentes de ventas, inventario, logistica y finanzas.
+            Sistema de Decisiones Basado en Conocimiento Corporativo para capturar
+            experiencia empresarial, convertirla en reglas explícitas y generar
+            recomendaciones para gerentes de ventas, inventario, logística y finanzas.
         </p>
     </div>
     <div class="knowledge-map">
         <span>Expertos</span>
         <span>Reglas XML</span>
         <span>Motor Python</span>
-        <span>Decision gerencial</span>
+        <span>Decisión gerencial</span>
     </div>
+</section>
+
+<section class="section-panel">
+    <div class="section-heading">
+        <h2>Filtros de análisis</h2>
+        <a class="text-link" href="{{ url_for('dashboard') }}">Limpiar filtros</a>
+    </div>
+    <form class="filter-form" method="get">
+        <label>Fecha inicial
+            <input type="date" name="fecha_inicio" value="{{ fecha_inicio }}">
+        </label>
+        <label>Fecha final
+            <input type="date" name="fecha_fin" value="{{ fecha_fin }}">
+        </label>
+        <button type="submit">Aplicar filtros</button>
+    </form>
 </section>
 
 <section class="kpi-grid">
@@ -38,6 +54,21 @@
     </article>
 </section>
 
+<section class="charts-grid">
+    <article class="chart-panel">
+        <h2>Decisiones por área</h2>
+        <canvas id="graficaAreas" height="220"></canvas>
+    </article>
+    <article class="chart-panel">
+        <h2>Prioridad de recomendaciones</h2>
+        <canvas id="graficaPrioridades" height="220"></canvas>
+    </article>
+    <article class="chart-panel wide">
+        <h2>Evaluaciones por fecha</h2>
+        <canvas id="graficaFechas" height="190"></canvas>
+    </article>
+</section>
+
 <section class="section-panel">
     <div class="section-heading">
         <h2>Evaluaciones recientes</h2>
@@ -48,7 +79,7 @@
             <thead>
                 <tr>
                     <th>Fecha</th>
-                    <th>Area</th>
+                    <th>Área</th>
                     <th>Variable</th>
                     <th>Valor</th>
                     <th>Prioridad</th>
@@ -64,10 +95,16 @@
                     <td><span class="priority {{ decision.prioridad|lower }}">{{ decision.prioridad }}</span></td>
                 </tr>
                 {% else %}
-                <tr><td colspan="5" class="empty">Aun no hay decisiones evaluadas.</td></tr>
+                <tr><td colspan="5" class="empty">Aún no hay decisiones evaluadas.</td></tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.datosGraficas = {{ datos_graficas|tojson }};
+</script>
 {% endblock %}

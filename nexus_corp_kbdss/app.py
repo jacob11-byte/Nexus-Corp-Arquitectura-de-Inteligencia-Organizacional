@@ -1,6 +1,6 @@
-"""Aplicacion web Nexus-Corp KBDSS.
+"""Aplicación web Nexus-Corp SDBCC.
 
-Prototipo universitario de un Sistema de Gestion de Decisiones Basado
+Prototipo universitario de un Sistema de Gestión de Decisiones Basado
 en Conocimiento usando Flask, XML y un motor de reglas en Python.
 """
 
@@ -23,13 +23,13 @@ DECISIONES_XML = DATA_DIR / "decisiones.xml"
 RETRO_XML = DATA_DIR / "retroalimentacion.xml"
 
 
-AREAS = ["Ventas", "Inventario", "Logistica", "Finanzas"]
+AREAS = ["Ventas", "Inventario", "Logística", "Finanzas"]
 OPERADORES = ["menor que", "mayor que", "igual a", "contiene"]
 PRIORIDADES = ["Baja", "Media", "Alta"]
 
 
 def asegurar_archivo_xml(ruta, raiz):
-    """Crea un archivo XML vacio si no existe."""
+    """Crea un archivo XML vacío si no existe."""
     if not ruta.exists():
         ruta.parent.mkdir(parents=True, exist_ok=True)
         ET.ElementTree(ET.Element(raiz)).write(ruta, encoding="utf-8", xml_declaration=True)
@@ -74,6 +74,60 @@ def obtener_decisiones():
     return list(reversed(decisiones))
 
 
+def convertir_fecha_decision(fecha_texto):
+    """Convierte la fecha guardada en XML para poder filtrarla."""
+    try:
+        return datetime.strptime(fecha_texto, "%Y-%m-%d %H:%M")
+    except ValueError:
+        return None
+
+
+def filtrar_decisiones_por_fecha(decisiones, fecha_inicio="", fecha_fin=""):
+    """Filtra decisiones por rango de fechas recibido desde el tablero."""
+    inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d") if fecha_inicio else None
+    fin = datetime.strptime(fecha_fin, "%Y-%m-%d").replace(hour=23, minute=59) if fecha_fin else None
+    filtradas = []
+
+    for decision in decisiones:
+        fecha = convertir_fecha_decision(decision["fecha"])
+        if fecha is None:
+            continue
+        if inicio and fecha < inicio:
+            continue
+        if fin and fecha > fin:
+            continue
+        filtradas.append(decision)
+
+    return filtradas
+
+
+def construir_datos_graficas(decisiones):
+    """Prepara datos agregados para las gráficas del tablero."""
+    areas = {area: 0 for area in AREAS}
+    prioridades = {"Alta": 0, "Media": 0, "Baja": 0, "Sin prioridad": 0}
+    fechas = {}
+
+    for decision in decisiones:
+        area = decision["area"]
+        prioridad = decision["prioridad"]
+        fecha = decision["fecha"][:10]
+        areas[area] = areas.get(area, 0) + 1
+        prioridades[prioridad] = prioridades.get(prioridad, 0) + 1
+        fechas[fecha] = fechas.get(fecha, 0) + 1
+
+    return {
+        "areas": {"etiquetas": list(areas.keys()), "valores": list(areas.values())},
+        "prioridades": {
+            "etiquetas": list(prioridades.keys()),
+            "valores": list(prioridades.values()),
+        },
+        "fechas": {
+            "etiquetas": sorted(fechas.keys()),
+            "valores": [fechas[fecha] for fecha in sorted(fechas.keys())],
+        },
+    }
+
+
 def obtener_retroalimentaciones():
     tree = leer_xml(RETRO_XML, "retroalimentaciones")
     items = []
@@ -102,7 +156,7 @@ def guardar_decision(area, variable, valor, observacion, resultado):
         "observacion": observacion,
         "regla": resultado.get("nombre", "Sin regla aplicable"),
         "recomendacion": resultado.get("recomendacion", resultado.get("mensaje", "")),
-        "prioridad": resultado.get("prioridad", "N/A"),
+        "prioridad": resultado.get("prioridad", "Sin prioridad"),
     }
 
     for clave, valor_item in datos.items():
@@ -126,21 +180,26 @@ def promedio_utilidad():
 
 
 def contar_recomendaciones():
-    return sum(1 for decision in obtener_decisiones() if decision["prioridad"] != "N/A")
+    return sum(1 for decision in obtener_decisiones() if decision["prioridad"] != "Sin prioridad")
 
 
 @app.route("/")
 def dashboard():
     reglas = cargar_reglas(REGLAS_XML)
-    decisiones = obtener_decisiones()
+    fecha_inicio = request.args.get("fecha_inicio", "")
+    fecha_fin = request.args.get("fecha_fin", "")
+    decisiones = filtrar_decisiones_por_fecha(obtener_decisiones(), fecha_inicio, fecha_fin)
     return render_template(
         "dashboard.html",
         active="dashboard",
         total_reglas=len(reglas),
         total_decisiones=len(decisiones),
-        total_recomendaciones=contar_recomendaciones(),
+        total_recomendaciones=sum(1 for decision in decisiones if decision["prioridad"] != "Sin prioridad"),
         promedio_utilidad=promedio_utilidad(),
         recientes=decisiones[:5],
+        datos_graficas=construir_datos_graficas(decisiones),
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
     )
 
 
@@ -190,7 +249,7 @@ def evaluar():
 
         resultado = evaluar_decision(area, variable, valor, REGLAS_XML)
         decision_id = guardar_decision(area, variable, valor, observacion, resultado)
-        flash("Decision evaluada y guardada en reportes.", "success")
+        flash("Decisión evaluada y guardada en reportes.", "success")
 
     return render_template(
         "evaluar.html",
@@ -227,7 +286,7 @@ def generar_interpretacion(area, variable, actual, simulado):
     except ValueError:
         return (
             f"En {area}, el cambio propuesto para {variable} permite comparar "
-            "dos escenarios cualitativos y preparar una decision gerencial."
+            "dos escenarios cualitativos y preparar una decisión gerencial."
         )
 
     diferencia = simulado_num - actual_num
@@ -237,9 +296,9 @@ def generar_interpretacion(area, variable, actual, simulado):
     if variable == "stock_actual" and simulado_num < actual_num:
         efecto = "el riesgo de desabastecimiento aumenta"
     elif variable in {"gasto_mensual", "retrasos_ruta"} and simulado_num > actual_num:
-        efecto = "la presion operativa aumenta y requiere seguimiento"
+        efecto = "la presión operativa aumenta y requiere seguimiento"
     elif variable == "dias_sin_compra" and simulado_num > actual_num:
-        efecto = "el riesgo de perdida del cliente aumenta"
+        efecto = "el riesgo de pérdida del cliente aumenta"
     else:
         efecto = "el escenario debe revisarse con indicadores complementarios"
 
@@ -266,7 +325,7 @@ def retroalimentacion():
             ET.SubElement(nodo, clave).text = valor.strip()
 
         guardar_xml(tree, RETRO_XML)
-        flash("Retroalimentacion registrada. Gracias por mejorar el conocimiento organizacional.", "success")
+        flash("Retroalimentación registrada. Gracias por mejorar el conocimiento organizacional.", "success")
         return redirect(url_for("retroalimentacion"))
 
     return render_template(
