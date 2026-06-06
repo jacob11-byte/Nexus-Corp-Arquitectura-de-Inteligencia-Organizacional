@@ -1,0 +1,8 @@
+.git
+__pycache__/
+*.pyc
+*.pyo
+*.log
+nexus_corp_kbdss/__pycache__/
+nexus_corp_kbdss/server.err.log
+nexus_corp_kbdss/server.out.log
