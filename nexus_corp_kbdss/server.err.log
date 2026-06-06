@@ -98,3 +98,11 @@ Press CTRL+C to quit
  * Debugger is active!
  * Debugger PIN: 121-732-337
 127.0.0.1 - - [05/Jun/2026 20:04:31] "GET /login HTTP/1.1" 200 -
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
