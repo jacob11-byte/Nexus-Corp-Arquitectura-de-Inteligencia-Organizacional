@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Analisis What-if{% endblock %}
+
+{% block content %}
+<section class="grid-two">
+    <form class="form-card needs-validation" method="post">
+        <h2>Simular escenario</h2>
+        <label>Area
+            <select name="area" required>
+                {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Variable
+            <input name="variable" required placeholder="Ej. stock_actual">
+        </label>
+        <label>Valor actual
+            <input name="valor_actual" required placeholder="Ej. 50">
+        </label>
+        <label>Valor simulado
+            <input name="valor_simulado" required placeholder="Ej. 15">
+        </label>
+        <button type="submit">Simular cambio</button>
+    </form>
+
+    <section class="result-panel">
+        <h2>Interpretacion</h2>
+        {% if interpretacion %}
+            <p class="recommendation">{{ interpretacion }}</p>
+        {% else %}
+            <p class="muted">Complete el formulario para comparar el escenario actual contra uno simulado.</p>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

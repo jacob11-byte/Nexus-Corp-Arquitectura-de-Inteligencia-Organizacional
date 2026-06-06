@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Registro de reglas{% endblock %}
+
+{% block content %}
+<section class="grid-two">
+    <form class="form-card needs-validation" method="post">
+        <h2>Nueva regla de conocimiento</h2>
+        <label>Nombre de la regla
+            <input name="nombre" required placeholder="Ej. Inventario bajo">
+        </label>
+        <label>Area de conocimiento
+            <select name="area" required>
+                {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Condicion principal
+            <input name="variable" required placeholder="Ej. stock_actual">
+        </label>
+        <label>Operador
+            <select name="operador" required>
+                {% for operador in operadores %}<option value="{{ operador }}">{{ operador }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Valor de comparacion
+            <input name="valor" required placeholder="Ej. 20">
+        </label>
+        <label>Recomendacion
+            <textarea name="recomendacion" required rows="4" placeholder="Accion sugerida para el gerente"></textarea>
+        </label>
+        <label>Prioridad
+            <select name="prioridad" required>
+                {% for prioridad in prioridades %}<option value="{{ prioridad }}">{{ prioridad }}</option>{% endfor %}
+            </select>
+        </label>
+        <button type="submit">Guardar regla</button>
+    </form>
+
+    <section class="section-panel">
+        <div class="section-heading">
+            <h2>Reglas existentes</h2>
+            <span class="count">{{ reglas|length }}</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Regla</th>
+                        <th>Area</th>
+                        <th>Condicion</th>
+                        <th>Prioridad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for regla in reglas %}
+                    <tr>
+                        <td>{{ regla.nombre }}</td>
+                        <td>{{ regla.area }}</td>
+                        <td>{{ regla.variable }} {{ regla.operador }} {{ regla.valor }}</td>
+                        <td><span class="priority {{ regla.prioridad|lower }}">{{ regla.prioridad }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">No hay reglas registradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+{% endblock %}

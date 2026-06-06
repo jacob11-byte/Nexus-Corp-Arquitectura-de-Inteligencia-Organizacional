@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Evaluar decision{% endblock %}
+
+{% block content %}
+<section class="grid-two">
+    <form class="form-card needs-validation" method="post">
+        <h2>Datos de la situacion</h2>
+        <label>Area
+            <select name="area" required>
+                {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Indicador o variable
+            <input name="variable" required placeholder="Ej. stock_actual">
+        </label>
+        <label>Valor actual
+            <input name="valor" required placeholder="Ej. 15">
+        </label>
+        <label>Observacion
+            <textarea name="observacion" rows="4" placeholder="Contexto de la decision"></textarea>
+        </label>
+        <button type="submit">Evaluar con motor de reglas</button>
+    </form>
+
+    <section class="result-panel">
+        <h2>Recomendacion generada</h2>
+        {% if resultado %}
+            {% if resultado.encontrada %}
+                <p class="rule-name">{{ resultado.nombre }}</p>
+                <p><strong>Area:</strong> {{ resultado.area }}</p>
+                <p><strong>Prioridad:</strong> <span class="priority {{ resultado.prioridad|lower }}">{{ resultado.prioridad }}</span></p>
+                <p class="recommendation">{{ resultado.recomendacion }}</p>
+                <a class="button-secondary" href="{{ url_for('retroalimentacion') }}?decision_id={{ decision_id }}">Calificar recomendacion</a>
+            {% else %}
+                <p class="recommendation muted">{{ resultado.mensaje }}</p>
+            {% endif %}
+        {% else %}
+            <p class="muted">Ingrese una situacion para activar el motor de reglas.</p>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

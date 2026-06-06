@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<decisiones>
+    <decision id="1">
+        <fecha>2026-06-05 09:30</fecha>
+        <area>Inventario</area>
+        <variable>stock_actual</variable>
+        <valor>15</valor>
+        <observacion>Producto de alta rotacion en sucursal central.</observacion>
+        <regla>Inventario bajo</regla>
+        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario esta por debajo del nivel minimo.</recomendacion>
+        <prioridad>Alta</prioridad>
+    </decision>
+</decisiones>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Reportes de decisiones{% endblock %}
+
+{% block content %}
+<section class="section-panel">
+    <div class="section-heading">
+        <h2>Decisiones evaluadas</h2>
+        <span class="count">{{ decisiones|length }}</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Area</th>
+                    <th>Variable</th>
+                    <th>Valor evaluado</th>
+                    <th>Recomendacion generada</th>
+                    <th>Prioridad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for decision in decisiones %}
+                <tr>
+                    <td>{{ decision.fecha }}</td>
+                    <td>{{ decision.area }}</td>
+                    <td>{{ decision.variable }}</td>
+                    <td>{{ decision.valor }}</td>
+                    <td>{{ decision.recomendacion }}</td>
+                    <td><span class="priority {{ decision.prioridad|lower }}">{{ decision.prioridad }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="empty">Aun no hay decisiones evaluadas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

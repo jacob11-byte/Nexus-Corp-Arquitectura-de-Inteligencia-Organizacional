@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard principal{% endblock %}
+
+{% block content %}
+<section class="intro-panel">
+    <div>
+        <h2>Nexus-Corp KBDSS</h2>
+        <p>
+            Sistema de Gestion de Decisiones Basado en Conocimiento para capturar
+            experiencia empresarial, convertirla en reglas explicitas y generar
+            recomendaciones para gerentes de ventas, inventario, logistica y finanzas.
+        </p>
+    </div>
+    <div class="knowledge-map">
+        <span>Expertos</span>
+        <span>Reglas XML</span>
+        <span>Motor Python</span>
+        <span>Decision gerencial</span>
+    </div>
+</section>
+
+<section class="kpi-grid">
+    <article class="kpi-card">
+        <span>Total de reglas</span>
+        <strong>{{ total_reglas }}</strong>
+    </article>
+    <article class="kpi-card">
+        <span>Decisiones evaluadas</span>
+        <strong>{{ total_decisiones }}</strong>
+    </article>
+    <article class="kpi-card">
+        <span>Recomendaciones generadas</span>
+        <strong>{{ total_recomendaciones }}</strong>
+    </article>
+    <article class="kpi-card">
+        <span>Promedio de utilidad</span>
+        <strong>{{ promedio_utilidad }}/5</strong>
+    </article>
+</section>
+
+<section class="section-panel">
+    <div class="section-heading">
+        <h2>Evaluaciones recientes</h2>
+        <a class="text-link" href="{{ url_for('reportes') }}">Ver reportes</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Area</th>
+                    <th>Variable</th>
+                    <th>Valor</th>
+                    <th>Prioridad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for decision in recientes %}
+                <tr>
+                    <td>{{ decision.fecha }}</td>
+                    <td>{{ decision.area }}</td>
+                    <td>{{ decision.variable }}</td>
+                    <td>{{ decision.valor }}</td>
+                    <td><span class="priority {{ decision.prioridad|lower }}">{{ decision.prioridad }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="empty">Aun no hay decisiones evaluadas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

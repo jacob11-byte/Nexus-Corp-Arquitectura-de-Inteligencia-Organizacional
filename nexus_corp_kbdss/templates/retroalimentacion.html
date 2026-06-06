@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Retroalimentacion{% endblock %}
+
+{% block content %}
+<section class="grid-two">
+    <form class="form-card needs-validation" method="post">
+        <h2>Calificar recomendacion</h2>
+        <label>Decision evaluada
+            <select name="decision_id" required>
+                {% for decision in decisiones %}
+                    <option value="{{ decision.id }}" {{ 'selected' if request.args.get('decision_id') == decision.id else '' }}>
+                        #{{ decision.id }} - {{ decision.area }} / {{ decision.variable }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Calificacion de utilidad
+            <select name="calificacion" required>
+                <option value="5">5 - Muy util</option>
+                <option value="4">4 - Util</option>
+                <option value="3">3 - Aceptable</option>
+                <option value="2">2 - Poco util</option>
+                <option value="1">1 - No util</option>
+            </select>
+        </label>
+        <label>Comentario
+            <textarea name="comentario" rows="4" required placeholder="Explique si la recomendacion ayudo a la decision"></textarea>
+        </label>
+        <button type="submit">Guardar retroalimentacion</button>
+    </form>
+
+    <section class="section-panel">
+        <div class="section-heading">
+            <h2>Resumen recibido</h2>
+            <span class="count">{{ promedio }}/5</span>
+        </div>
+        <div class="feedback-list">
+            {% for item in retroalimentaciones %}
+                <article class="feedback-item">
+                    <strong>Decision #{{ item.decision_id }} - {{ item.calificacion }}/5</strong>
+                    <span>{{ item.fecha }}</span>
+                    <p>{{ item.comentario }}</p>
+                </article>
+            {% else %}
+                <p class="empty">Aun no hay retroalimentaciones registradas.</p>
+            {% endfor %}
+        </div>
+    </section>
+</section>
+{% endblock %}

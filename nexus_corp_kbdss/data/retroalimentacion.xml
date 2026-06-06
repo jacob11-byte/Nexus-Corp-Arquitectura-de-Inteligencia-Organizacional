@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<retroalimentaciones>
+    <retroalimentacion id="1">
+        <fecha>2026-06-05 10:00</fecha>
+        <decision_id>1</decision_id>
+        <calificacion>5</calificacion>
+        <comentario>La recomendacion fue clara y permitio priorizar la compra de inventario.</comentario>
+    </retroalimentacion>
+</retroalimentaciones>

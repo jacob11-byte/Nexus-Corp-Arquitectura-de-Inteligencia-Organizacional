@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<reglas>
+    <regla id="1">
+        <nombre>Inventario bajo</nombre>
+        <area>Inventario</area>
+        <variable>stock_actual</variable>
+        <operador>menor que</operador>
+        <valor>20</valor>
+        <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario esta por debajo del nivel minimo.</recomendacion>
+        <prioridad>Alta</prioridad>
+    </regla>
+    <regla id="2">
+        <nombre>Cliente con riesgo de abandono</nombre>
+        <area>Ventas</area>
+        <variable>dias_sin_compra</variable>
+        <operador>mayor que</operador>
+        <valor>60</valor>
+        <recomendacion>Contactar al cliente y ofrecer seguimiento comercial, ya que presenta riesgo de abandono.</recomendacion>
+        <prioridad>Media</prioridad>
+    </regla>
+    <regla id="3">
+        <nombre>Retrasos frecuentes en ruta</nombre>
+        <area>Logistica</area>
+        <variable>retrasos_ruta</variable>
+        <operador>mayor que</operador>
+        <valor>3</valor>
+        <recomendacion>Evaluar una ruta alternativa debido a retrasos frecuentes en la distribucion.</recomendacion>
+        <prioridad>Alta</prioridad>
+    </regla>
+    <regla id="4">
+        <nombre>Gasto mensual elevado</nombre>
+        <area>Finanzas</area>
+        <variable>gasto_mensual</variable>
+        <operador>mayor que</operador>
+        <valor>10000</valor>
+        <recomendacion>Revisar el presupuesto del area porque los gastos superan el limite establecido.</recomendacion>
+        <prioridad>Media</prioridad>
+    </regla>
+</reglas>
