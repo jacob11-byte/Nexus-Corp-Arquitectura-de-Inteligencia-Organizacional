@@ -7,10 +7,12 @@ en Conocimiento usando Flask, XML y un motor de reglas en Python.
 from datetime import datetime
 from functools import wraps
 import hashlib
+import os
 from pathlib import Path
+import shutil
 import xml.etree.ElementTree as ET
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.utils import secure_filename
 
 from motor_reglas import cargar_reglas, evaluar_decision
@@ -20,14 +22,21 @@ app = Flask(__name__)
 app.secret_key = "nexus-corp-kbdss-demo"
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
+DATA_SOURCE_DIR = BASE_DIR / "data"
+if os.environ.get("VERCEL"):
+    DATA_DIR = Path("/tmp") / "nexus_corp_kbdss_data"
+else:
+    DATA_DIR = DATA_SOURCE_DIR
 REGLAS_XML = DATA_DIR / "reglas.xml"
 DECISIONES_XML = DATA_DIR / "decisiones.xml"
 RETRO_XML = DATA_DIR / "retroalimentacion.xml"
 USUARIOS_XML = DATA_DIR / "usuarios.xml"
 AUDITORIA_XML = DATA_DIR / "auditoria.xml"
 CONFIG_XML = DATA_DIR / "configuracion.xml"
-UPLOAD_DIR = BASE_DIR / "static" / "uploads"
+if os.environ.get("VERCEL"):
+    UPLOAD_DIR = Path("/tmp") / "nexus_corp_kbdss_uploads"
+else:
+    UPLOAD_DIR = BASE_DIR / "static" / "uploads"
 
 
 AREAS = ["Ventas", "Inventario", "Logística", "Finanzas", "Atención al cliente", "Gerencia"]
@@ -65,6 +74,10 @@ def asegurar_archivo_xml(ruta, raiz):
     """Crea un archivo XML vacío si no existe."""
     if not ruta.exists():
         ruta.parent.mkdir(parents=True, exist_ok=True)
+        plantilla = DATA_SOURCE_DIR / ruta.name
+        if plantilla.exists() and plantilla.resolve() != ruta.resolve():
+            shutil.copyfile(plantilla, ruta)
+            return
         ET.ElementTree(ET.Element(raiz)).write(ruta, encoding="utf-8", xml_declaration=True)
 
 
@@ -229,10 +242,12 @@ def guardar_configuracion_empresa(nombre, logo):
 
 @app.context_processor
 def contexto_usuario():
+    empresa = obtener_configuracion_empresa()
+    empresa["logo_url"] = url_for("imagen_empresa", filename=empresa["logo"]) if empresa["logo"] else ""
     return {
         "usuario_actual": usuario_actual(),
         "puede": puede,
-        "empresa": obtener_configuracion_empresa(),
+        "empresa": empresa,
     }
 
 
@@ -596,6 +611,11 @@ def login():
         flash("Usuario o contraseña incorrectos.", "error")
 
     return render_template("login.html", active="login")
+
+
+@app.route("/imagen-empresa/<filename>")
+def imagen_empresa(filename):
+    return send_from_directory(UPLOAD_DIR, filename)
 
 
 @app.route("/logout")

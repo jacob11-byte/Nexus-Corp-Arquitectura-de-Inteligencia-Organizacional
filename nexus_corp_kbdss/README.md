@@ -60,6 +60,12 @@ El archivo `data/usuarios.xml` almacena usuarios, roles, áreas y estado de acce
 
 El administrador puede subir el logo o imagen de la empresa desde el módulo `Usuarios`. La imagen se guarda en `static/uploads/` y la referencia queda registrada en `data/configuracion.xml`. El logo aparece automáticamente en el inicio de sesión y en el menú lateral del sistema.
 
+## Despliegue en Vercel
+
+El repositorio incluye `vercel.json`, `requirements.txt` y `api/index.py` en la raíz para que Vercel pueda encontrar la aplicación Flask. En Vercel se debe desplegar desde la raíz del repositorio, no solo desde la carpeta `nexus_corp_kbdss`.
+
+Nota: Vercel usa funciones serverless. Los XML y logos subidos durante la ejecución se guardan temporalmente en `/tmp`, por lo que sirven para demostración, pero no como almacenamiento permanente. Para persistencia real conviene usar SQLite fuera de Vercel, PostgreSQL, Supabase o Vercel Blob.
+
 ## Base de datos recomendada
 
 La base de datos recomendada es SQLite. Se integraría como un archivo local en `data/nexus_corp.db`, usando un módulo nuevo llamado `repositorio_datos.py` para centralizar consultas y registros. La propuesta completa está en `PROPUESTA_BASE_DATOS.md`.

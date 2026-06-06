@@ -9,8 +9,8 @@
     </div>
     <form class="company-form" method="post" action="{{ url_for('empresa_imagen') }}" enctype="multipart/form-data">
         <div class="company-preview">
-            {% if empresa_config.logo %}
-                <img src="{{ url_for('static', filename='uploads/' ~ empresa_config.logo) }}" alt="Logo de {{ empresa_config.nombre }}">
+            {% if empresa.logo_url %}
+                <img src="{{ empresa.logo_url }}" alt="Logo de {{ empresa_config.nombre }}">
             {% else %}
                 <span class="brand-mark">NC</span>
             {% endif %}
