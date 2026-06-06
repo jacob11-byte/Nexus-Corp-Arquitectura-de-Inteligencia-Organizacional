@@ -27,6 +27,14 @@
         <label>Recomendación
             <textarea name="recomendacion" required rows="4" placeholder="Acción sugerida para el gerente"></textarea>
         </label>
+        <label>Experto que aporta el conocimiento
+            <input name="experto" required value="{{ usuario_actual.nombre }}">
+        </label>
+        <label>Estado de la regla
+            <select name="estado" required>
+                {% for estado in estados %}<option value="{{ estado }}">{{ estado }}</option>{% endfor %}
+            </select>
+        </label>
         <label>Prioridad
             <select name="prioridad" required>
                 {% for prioridad in prioridades %}<option value="{{ prioridad }}">{{ prioridad }}</option>{% endfor %}
@@ -37,7 +45,7 @@
 
     <section class="section-panel">
         <div class="section-heading">
-            <h2>Reglas existentes</h2>
+            <h2>Base de conocimiento</h2>
             <span class="count">{{ reglas|length }}</span>
         </div>
         <div class="table-wrap">
@@ -47,6 +55,8 @@
                         <th>Regla</th>
                         <th>Área</th>
                         <th>Condición</th>
+                        <th>Experto</th>
+                        <th>Estado</th>
                         <th>Prioridad</th>
                     </tr>
                 </thead>
@@ -56,10 +66,12 @@
                         <td>{{ regla.nombre }}</td>
                         <td>{{ regla.area }}</td>
                         <td>{{ regla.variable }} {{ regla.operador }} {{ regla.valor }}</td>
+                        <td>{{ regla.experto or "No registrado" }}</td>
+                        <td>{{ regla.estado }}</td>
                         <td><span class="priority {{ regla.prioridad|lower }}">{{ regla.prioridad }}</span></td>
                     </tr>
                     {% else %}
-                    <tr><td colspan="4" class="empty">No hay reglas registradas.</td></tr>
+                    <tr><td colspan="6" class="empty">No hay reglas registradas.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>

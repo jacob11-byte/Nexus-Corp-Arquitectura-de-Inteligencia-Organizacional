@@ -12,6 +12,7 @@
             <thead>
                 <tr>
                     <th>Fecha</th>
+                    <th>Usuario</th>
                     <th>Área</th>
                     <th>Variable</th>
                     <th>Valor evaluado</th>
@@ -23,6 +24,7 @@
                 {% for decision in decisiones %}
                 <tr>
                     <td>{{ decision.fecha }}</td>
+                    <td>{{ decision.usuario or "No registrado" }}</td>
                     <td>{{ decision.area }}</td>
                     <td>{{ decision.variable }}</td>
                     <td>{{ decision.valor }}</td>
@@ -30,7 +32,7 @@
                     <td><span class="priority {{ decision.prioridad|lower }}">{{ decision.prioridad }}</span></td>
                 </tr>
                 {% else %}
-                <tr><td colspan="6" class="empty">Aún no hay decisiones evaluadas.</td></tr>
+                <tr><td colspan="7" class="empty">Aún no hay decisiones evaluadas.</td></tr>
                 {% endfor %}
             </tbody>
         </table>

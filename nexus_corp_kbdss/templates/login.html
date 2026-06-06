@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Inicio de sesión{% endblock %}
+
+{% block content %}
+<section class="login-card">
+    <div class="login-heading">
+        <span class="brand-mark">NC</span>
+        <div>
+            <h1>Nexus-Corp SDBCC</h1>
+            <p>Acceso autorizado por usuario y rol</p>
+        </div>
+    </div>
+
+    <form class="needs-validation" method="post">
+        <label>Usuario
+            <input name="usuario" required placeholder="admin">
+        </label>
+        <label>Contraseña
+            <input type="password" name="contrasena" required placeholder="admin123">
+        </label>
+        <button type="submit">Ingresar al sistema</button>
+    </form>
+
+    <div class="demo-users">
+        <strong>Usuarios de prueba</strong>
+        <p>admin / admin123</p>
+        <p>conocimiento / conocimiento123</p>
+        <p>experto / experto123</p>
+        <p>gerente / gerente123</p>
+        <p>analista / analista123</p>
+    </div>
+</section>
+{% endblock %}

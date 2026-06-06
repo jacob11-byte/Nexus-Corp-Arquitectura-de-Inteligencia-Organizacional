@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Auditoría del sistema{% endblock %}
+
+{% block content %}
+<section class="section-panel">
+    <div class="section-heading">
+        <h2>Acciones importantes</h2>
+        <span class="count">{{ auditorias|length }}</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Acción</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in auditorias %}
+                <tr>
+                    <td>{{ item.fecha }}</td>
+                    <td>{{ item.nombre }} ({{ item.usuario }})</td>
+                    <td>{{ item.rol }}</td>
+                    <td>{{ item.accion }}</td>
+                    <td>{{ item.detalle }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="empty">Aún no hay acciones registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

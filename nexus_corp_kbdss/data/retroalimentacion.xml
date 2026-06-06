@@ -3,7 +3,10 @@
     <retroalimentacion id="1">
         <fecha>2026-06-05 10:00</fecha>
         <decision_id>1</decision_id>
+        <util>Sí</util>
         <calificacion>5</calificacion>
         <comentario>La recomendación fue clara y permitió priorizar la compra de inventario.</comentario>
+        <resultado>Se realizó reabastecimiento prioritario.</resultado>
+        <sugerencia>Mantener la regla activa durante temporada de alta demanda.</sugerencia>
     </retroalimentacion>
 </retroalimentaciones>

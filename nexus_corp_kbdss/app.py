@@ -5,10 +5,12 @@ en Conocimiento usando Flask, XML y un motor de reglas en Python.
 """
 
 from datetime import datetime
+from functools import wraps
+import hashlib
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 from motor_reglas import cargar_reglas, evaluar_decision
 
@@ -21,11 +23,38 @@ DATA_DIR = BASE_DIR / "data"
 REGLAS_XML = DATA_DIR / "reglas.xml"
 DECISIONES_XML = DATA_DIR / "decisiones.xml"
 RETRO_XML = DATA_DIR / "retroalimentacion.xml"
+USUARIOS_XML = DATA_DIR / "usuarios.xml"
+AUDITORIA_XML = DATA_DIR / "auditoria.xml"
 
 
-AREAS = ["Ventas", "Inventario", "Logística", "Finanzas"]
+AREAS = ["Ventas", "Inventario", "Logística", "Finanzas", "Atención al cliente", "Gerencia"]
 OPERADORES = ["menor que", "mayor que", "igual a", "contiene"]
 PRIORIDADES = ["Baja", "Media", "Alta"]
+ESTADOS_REGLA = ["Activa", "En revisión", "Actualizada", "Descartada", "Inactiva"]
+ROLES = [
+    "Administrador del sistema",
+    "Administrador de conocimiento",
+    "Experto",
+    "Decisor o gerente",
+    "Analista",
+]
+
+PERMISOS = {
+    "Administrador del sistema": {
+        "dashboard",
+        "usuarios",
+        "reglas",
+        "evaluar",
+        "whatif",
+        "retroalimentacion",
+        "reportes",
+        "auditoria",
+    },
+    "Administrador de conocimiento": {"dashboard", "reglas", "retroalimentacion", "reportes"},
+    "Experto": {"dashboard", "reglas", "retroalimentacion"},
+    "Decisor o gerente": {"dashboard", "evaluar", "whatif", "retroalimentacion", "reportes"},
+    "Analista": {"dashboard", "retroalimentacion", "reportes"},
+}
 
 
 def asegurar_archivo_xml(ruta, raiz):
@@ -54,6 +83,118 @@ def siguiente_id(root, etiqueta):
     return str(max(ids, default=0) + 1)
 
 
+def cifrar_contrasena(contrasena):
+    """Genera un resumen SHA-256 para las contraseñas del prototipo."""
+    return hashlib.sha256(contrasena.encode("utf-8")).hexdigest()
+
+
+def obtener_usuarios():
+    tree = leer_xml(USUARIOS_XML, "usuarios")
+    usuarios = []
+    for nodo in tree.getroot().findall("usuario"):
+        usuarios.append(
+            {
+                "id": nodo.get("id", ""),
+                "nombre": nodo.findtext("nombre", default=""),
+                "usuario": nodo.findtext("usuario", default=""),
+                "rol": nodo.findtext("rol", default=""),
+                "area": nodo.findtext("area", default=""),
+                "estado": nodo.findtext("estado", default="Activo"),
+                "contrasena": nodo.findtext("contrasena", default=""),
+            }
+        )
+    return usuarios
+
+
+def buscar_usuario(nombre_usuario):
+    for usuario in obtener_usuarios():
+        if usuario["usuario"].lower() == (nombre_usuario or "").strip().lower():
+            return usuario
+    return None
+
+
+def usuario_actual():
+    if "usuario" not in session:
+        return None
+    return session["usuario"]
+
+
+def puede(permiso):
+    usuario = usuario_actual()
+    if not usuario:
+        return False
+    return permiso in PERMISOS.get(usuario["rol"], set())
+
+
+def requiere_login(funcion):
+    @wraps(funcion)
+    def envoltura(*args, **kwargs):
+        if "usuario" not in session:
+            flash("Debe iniciar sesión para acceder al sistema.", "warning")
+            return redirect(url_for("login"))
+        return funcion(*args, **kwargs)
+
+    return envoltura
+
+
+def requiere_permiso(permiso):
+    def decorador(funcion):
+        @wraps(funcion)
+        def envoltura(*args, **kwargs):
+            if "usuario" not in session:
+                flash("Debe iniciar sesión para acceder al sistema.", "warning")
+                return redirect(url_for("login"))
+            if not puede(permiso):
+                registrar_auditoria("Acceso denegado", f"Intento de acceso a {permiso}")
+                flash("Su rol no tiene permiso para acceder a este módulo.", "error")
+                return redirect(url_for("dashboard"))
+            return funcion(*args, **kwargs)
+
+        return envoltura
+
+    return decorador
+
+
+def registrar_auditoria(accion, detalle):
+    tree = leer_xml(AUDITORIA_XML, "auditorias")
+    root = tree.getroot()
+    nodo = ET.SubElement(root, "auditoria", id=siguiente_id(root, "auditoria"))
+    usuario = usuario_actual() or {"nombre": "Sistema", "usuario": "sistema", "rol": "Sistema"}
+    campos = {
+        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "usuario": usuario["usuario"],
+        "nombre": usuario["nombre"],
+        "rol": usuario["rol"],
+        "accion": accion,
+        "detalle": detalle,
+    }
+    for clave, valor in campos.items():
+        ET.SubElement(nodo, clave).text = valor
+    guardar_xml(tree, AUDITORIA_XML)
+
+
+def obtener_auditorias():
+    tree = leer_xml(AUDITORIA_XML, "auditorias")
+    eventos = []
+    for nodo in tree.getroot().findall("auditoria"):
+        eventos.append(
+            {
+                "fecha": nodo.findtext("fecha", default=""),
+                "usuario": nodo.findtext("usuario", default=""),
+                "nombre": nodo.findtext("nombre", default=""),
+                "rol": nodo.findtext("rol", default=""),
+                "accion": nodo.findtext("accion", default=""),
+                "detalle": nodo.findtext("detalle", default=""),
+            }
+        )
+    return list(reversed(eventos))
+
+
+@app.context_processor
+def contexto_usuario():
+    return {"usuario_actual": usuario_actual(), "puede": puede}
+
+
 def obtener_decisiones():
     tree = leer_xml(DECISIONES_XML, "decisiones")
     decisiones = []
@@ -66,6 +207,7 @@ def obtener_decisiones():
                 "variable": nodo.findtext("variable", default=""),
                 "valor": nodo.findtext("valor", default=""),
                 "observacion": nodo.findtext("observacion", default=""),
+                "usuario": nodo.findtext("usuario", default=""),
                 "regla": nodo.findtext("regla", default=""),
                 "recomendacion": nodo.findtext("recomendacion", default=""),
                 "prioridad": nodo.findtext("prioridad", default=""),
@@ -137,7 +279,10 @@ def obtener_retroalimentaciones():
                 "fecha": nodo.findtext("fecha", default=""),
                 "decision_id": nodo.findtext("decision_id", default=""),
                 "calificacion": nodo.findtext("calificacion", default=""),
+                "util": nodo.findtext("util", default=""),
                 "comentario": nodo.findtext("comentario", default=""),
+                "resultado": nodo.findtext("resultado", default=""),
+                "sugerencia": nodo.findtext("sugerencia", default=""),
             }
         )
     return list(reversed(items))
@@ -154,6 +299,7 @@ def guardar_decision(area, variable, valor, observacion, resultado):
         "variable": variable,
         "valor": valor,
         "observacion": observacion,
+        "usuario": usuario_actual()["usuario"] if usuario_actual() else "sin_usuario",
         "regla": resultado.get("nombre", "Sin regla aplicable"),
         "recomendacion": resultado.get("recomendacion", resultado.get("mensaje", "")),
         "prioridad": resultado.get("prioridad", "Sin prioridad"),
@@ -163,6 +309,7 @@ def guardar_decision(area, variable, valor, observacion, resultado):
         ET.SubElement(decision, clave).text = valor_item
 
     guardar_xml(tree, DECISIONES_XML)
+    registrar_auditoria("Evaluación de decisión", f"{area} / {variable} = {valor}")
     return decision.get("id")
 
 
@@ -183,7 +330,24 @@ def contar_recomendaciones():
     return sum(1 for decision in obtener_decisiones() if decision["prioridad"] != "Sin prioridad")
 
 
+def contar_recomendaciones_utiles():
+    utiles = 0
+    for item in obtener_retroalimentaciones():
+        try:
+            if float(item["calificacion"]) >= 4:
+                utiles += 1
+        except ValueError:
+            pass
+    return utiles
+
+
+def contar_reglas_activas(reglas):
+    return sum(1 for regla in reglas if regla.get("estado", "Activa") in {"Activa", "Actualizada"})
+
+
 @app.route("/")
+@requiere_login
+@requiere_permiso("dashboard")
 def dashboard():
     reglas = cargar_reglas(REGLAS_XML)
     fecha_inicio = request.args.get("fecha_inicio", "")
@@ -192,9 +356,10 @@ def dashboard():
     return render_template(
         "dashboard.html",
         active="dashboard",
-        total_reglas=len(reglas),
+        total_reglas=contar_reglas_activas(reglas),
         total_decisiones=len(decisiones),
         total_recomendaciones=sum(1 for decision in decisiones if decision["prioridad"] != "Sin prioridad"),
+        total_utiles=contar_recomendaciones_utiles(),
         promedio_utilidad=promedio_utilidad(),
         recientes=decisiones[:5],
         datos_graficas=construir_datos_graficas(decisiones),
@@ -204,6 +369,8 @@ def dashboard():
 
 
 @app.route("/reglas", methods=["GET", "POST"])
+@requiere_login
+@requiere_permiso("reglas")
 def reglas():
     if request.method == "POST":
         tree = leer_xml(REGLAS_XML, "reglas")
@@ -218,12 +385,16 @@ def reglas():
             "valor": request.form.get("valor", ""),
             "recomendacion": request.form.get("recomendacion", ""),
             "prioridad": request.form.get("prioridad", ""),
+            "experto": request.form.get("experto", usuario_actual()["nombre"]),
+            "fecha_creacion": datetime.now().strftime("%Y-%m-%d"),
+            "estado": request.form.get("estado", "Activa"),
         }
 
         for clave, valor in campos.items():
             ET.SubElement(regla, clave).text = valor.strip()
 
         guardar_xml(tree, REGLAS_XML)
+        registrar_auditoria("Creación de regla", campos["nombre"])
         flash("Regla de conocimiento registrada correctamente.", "success")
         return redirect(url_for("reglas"))
 
@@ -234,10 +405,13 @@ def reglas():
         areas=AREAS,
         operadores=OPERADORES,
         prioridades=PRIORIDADES,
+        estados=ESTADOS_REGLA,
     )
 
 
 @app.route("/evaluar", methods=["GET", "POST"])
+@requiere_login
+@requiere_permiso("evaluar")
 def evaluar():
     resultado = None
     decision_id = None
@@ -261,6 +435,8 @@ def evaluar():
 
 
 @app.route("/whatif", methods=["GET", "POST"])
+@requiere_login
+@requiere_permiso("whatif")
 def whatif():
     interpretacion = None
     if request.method == "POST":
@@ -309,6 +485,8 @@ def generar_interpretacion(area, variable, actual, simulado):
 
 
 @app.route("/retroalimentacion", methods=["GET", "POST"])
+@requiere_login
+@requiere_permiso("retroalimentacion")
 def retroalimentacion():
     if request.method == "POST":
         tree = leer_xml(RETRO_XML, "retroalimentaciones")
@@ -318,13 +496,17 @@ def retroalimentacion():
         campos = {
             "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "decision_id": request.form.get("decision_id", ""),
+            "util": request.form.get("util", ""),
             "calificacion": request.form.get("calificacion", ""),
             "comentario": request.form.get("comentario", ""),
+            "resultado": request.form.get("resultado", ""),
+            "sugerencia": request.form.get("sugerencia", ""),
         }
         for clave, valor in campos.items():
             ET.SubElement(nodo, clave).text = valor.strip()
 
         guardar_xml(tree, RETRO_XML)
+        registrar_auditoria("Registro de retroalimentación", f"Decisión #{campos['decision_id']}")
         flash("Retroalimentación registrada. Gracias por mejorar el conocimiento organizacional.", "success")
         return redirect(url_for("retroalimentacion"))
 
@@ -338,12 +520,96 @@ def retroalimentacion():
 
 
 @app.route("/reportes")
+@requiere_login
+@requiere_permiso("reportes")
 def reportes():
     return render_template(
         "reportes.html",
         active="reportes",
         decisiones=obtener_decisiones(),
     )
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        nombre_usuario = request.form.get("usuario", "")
+        contrasena = request.form.get("contrasena", "")
+        usuario = buscar_usuario(nombre_usuario)
+
+        if (
+            usuario
+            and usuario["estado"] == "Activo"
+            and usuario["contrasena"] == cifrar_contrasena(contrasena)
+        ):
+            session["usuario"] = {
+                "id": usuario["id"],
+                "nombre": usuario["nombre"],
+                "usuario": usuario["usuario"],
+                "rol": usuario["rol"],
+                "area": usuario["area"],
+            }
+            registrar_auditoria("Inicio de sesión", "Acceso correcto al sistema")
+            return redirect(url_for("dashboard"))
+
+        flash("Usuario o contraseña incorrectos.", "error")
+
+    return render_template("login.html", active="login")
+
+
+@app.route("/logout")
+@requiere_login
+def logout():
+    registrar_auditoria("Cierre de sesión", "Salida del sistema")
+    session.clear()
+    flash("Sesión cerrada correctamente.", "success")
+    return redirect(url_for("login"))
+
+
+@app.route("/usuarios", methods=["GET", "POST"])
+@requiere_login
+@requiere_permiso("usuarios")
+def usuarios():
+    if request.method == "POST":
+        tree = leer_xml(USUARIOS_XML, "usuarios")
+        root = tree.getroot()
+        nombre_usuario = request.form.get("usuario", "").strip()
+
+        if buscar_usuario(nombre_usuario):
+            flash("Ya existe un usuario con ese nombre de acceso.", "error")
+            return redirect(url_for("usuarios"))
+
+        nodo = ET.SubElement(root, "usuario", id=siguiente_id(root, "usuario"))
+        campos = {
+            "nombre": request.form.get("nombre", ""),
+            "usuario": nombre_usuario,
+            "contrasena": cifrar_contrasena(request.form.get("contrasena", "")),
+            "rol": request.form.get("rol", ""),
+            "area": request.form.get("area", ""),
+            "estado": request.form.get("estado", "Activo"),
+        }
+        for clave, valor in campos.items():
+            ET.SubElement(nodo, clave).text = valor.strip()
+
+        guardar_xml(tree, USUARIOS_XML)
+        registrar_auditoria("Creación de usuario", nombre_usuario)
+        flash("Usuario creado correctamente.", "success")
+        return redirect(url_for("usuarios"))
+
+    return render_template(
+        "usuarios.html",
+        active="usuarios",
+        usuarios=obtener_usuarios(),
+        roles=ROLES,
+        areas=AREAS,
+    )
+
+
+@app.route("/auditoria")
+@requiere_login
+@requiere_permiso("auditoria")
+def auditoria():
+    return render_template("auditoria.html", active="auditoria", auditorias=obtener_auditorias())
 
 
 if __name__ == "__main__":

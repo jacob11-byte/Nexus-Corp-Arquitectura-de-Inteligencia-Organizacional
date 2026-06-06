@@ -8,6 +8,9 @@
         <valor>20</valor>
         <recomendacion>Reabastecer el producto de forma prioritaria porque el inventario está por debajo del nivel mínimo.</recomendacion>
         <prioridad>Alta</prioridad>
+        <experto>Encargado de inventario</experto>
+        <fecha_creacion>2026-06-05</fecha_creacion>
+        <estado>Activa</estado>
     </regla>
     <regla id="2">
         <nombre>Cliente con riesgo de abandono</nombre>
@@ -17,6 +20,9 @@
         <valor>60</valor>
         <recomendacion>Contactar al cliente y ofrecer seguimiento comercial, ya que presenta riesgo de abandono.</recomendacion>
         <prioridad>Media</prioridad>
+        <experto>Jefe de ventas</experto>
+        <fecha_creacion>2026-06-05</fecha_creacion>
+        <estado>Activa</estado>
     </regla>
     <regla id="3">
         <nombre>Retrasos frecuentes en ruta</nombre>
@@ -26,6 +32,9 @@
         <valor>3</valor>
         <recomendacion>Evaluar una ruta alternativa debido a retrasos frecuentes en la distribución.</recomendacion>
         <prioridad>Alta</prioridad>
+        <experto>Coordinador logístico</experto>
+        <fecha_creacion>2026-06-05</fecha_creacion>
+        <estado>Activa</estado>
     </regla>
     <regla id="4">
         <nombre>Gasto mensual elevado</nombre>
@@ -35,5 +44,8 @@
         <valor>10000</valor>
         <recomendacion>Revisar el presupuesto del área porque los gastos superan el límite establecido.</recomendacion>
         <prioridad>Media</prioridad>
+        <experto>Jefe financiero</experto>
+        <fecha_creacion>2026-06-05</fecha_creacion>
+        <estado>Activa</estado>
     </regla>
 </reglas>

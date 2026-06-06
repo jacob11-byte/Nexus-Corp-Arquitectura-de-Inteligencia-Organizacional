@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Usuarios y roles{% endblock %}
+
+{% block content %}
+<section class="grid-two">
+    <form class="form-card needs-validation" method="post">
+        <h2>Nuevo usuario</h2>
+        <label>Nombre completo
+            <input name="nombre" required placeholder="Ej. Jefe de inventario">
+        </label>
+        <label>Usuario de acceso
+            <input name="usuario" required placeholder="Ej. inventario">
+        </label>
+        <label>Contraseña
+            <input type="password" name="contrasena" required placeholder="Mínimo para prueba">
+        </label>
+        <label>Rol
+            <select name="rol" required>
+                {% for rol in roles %}<option value="{{ rol }}">{{ rol }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Área
+            <select name="area" required>
+                {% for area in areas %}<option value="{{ area }}">{{ area }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>Estado
+            <select name="estado" required>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+            </select>
+        </label>
+        <button type="submit">Crear usuario</button>
+    </form>
+
+    <section class="section-panel">
+        <div class="section-heading">
+            <h2>Usuarios registrados</h2>
+            <span class="count">{{ usuarios|length }}</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Área</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.usuario }}</td>
+                        <td>{{ usuario.rol }}</td>
+                        <td>{{ usuario.area }}</td>
+                        <td>{{ usuario.estado }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="empty">No hay usuarios registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+{% endblock %}

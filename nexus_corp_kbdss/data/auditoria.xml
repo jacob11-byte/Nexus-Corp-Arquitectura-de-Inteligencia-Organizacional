@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<auditorias>
+    <auditoria id="1">
+        <fecha>2026-06-05 10:05</fecha>
+        <usuario>sistema</usuario>
+        <nombre>Sistema</nombre>
+        <rol>Sistema</rol>
+        <accion>Configuración inicial</accion>
+        <detalle>Creación de usuarios, roles y control de acceso del prototipo.</detalle>
+    </auditoria>
+<auditoria id="2"><fecha>2026-06-05 19:50</fecha><usuario>admin</usuario><nombre>Administrador General</nombre><rol>Administrador del sistema</rol><accion>Inicio de sesión</accion><detalle>Acceso correcto al sistema</detalle></auditoria><auditoria id="3"><fecha>2026-06-05 19:50</fecha><usuario>gerente</usuario><nombre>Gerente Decisor</nombre><rol>Decisor o gerente</rol><accion>Inicio de sesión</accion><detalle>Acceso correcto al sistema</detalle></auditoria><auditoria id="4"><fecha>2026-06-05 19:50</fecha><usuario>gerente</usuario><nombre>Gerente Decisor</nombre><rol>Decisor o gerente</rol><accion>Acceso denegado</accion><detalle>Intento de acceso a reglas</detalle></auditoria><auditoria id="5"><fecha>2026-06-05 19:51</fecha><usuario>admin</usuario><nombre>Administrador General</nombre><rol>Administrador del sistema</rol><accion>Inicio de sesión</accion><detalle>Acceso correcto al sistema</detalle></auditoria></auditorias>

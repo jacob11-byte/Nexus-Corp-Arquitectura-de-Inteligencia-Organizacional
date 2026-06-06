@@ -48,6 +48,9 @@ def cargar_reglas(ruta_xml=REGLAS_XML):
                 "valor": nodo.findtext("valor", default=""),
                 "recomendacion": nodo.findtext("recomendacion", default=""),
                 "prioridad": nodo.findtext("prioridad", default=""),
+                "experto": nodo.findtext("experto", default=""),
+                "fecha_creacion": nodo.findtext("fecha_creacion", default=""),
+                "estado": nodo.findtext("estado", default="Activa"),
             }
         )
 
@@ -87,6 +90,8 @@ def evaluar_decision(area, variable, valor_actual, ruta_xml=REGLAS_XML):
     variable_normalizada = _normalizar(variable)
 
     for regla in cargar_reglas(ruta_xml):
+        if _normalizar(regla["estado"]) not in {"activa", "actualizada"}:
+            continue
         if _normalizar(regla["area"]) != area_normalizada:
             continue
         if _normalizar(regla["variable"]) != variable_normalizada:

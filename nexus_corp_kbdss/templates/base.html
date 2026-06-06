@@ -6,7 +6,8 @@
     <title>Nexus-Corp SDBCC</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="{{ 'login-page' if active == 'login' else '' }}">
+    {% if active != 'login' %}
     <aside class="sidebar">
         <div class="brand">
             <span class="brand-mark">NC</span>
@@ -16,12 +17,14 @@
             </div>
         </div>
         <nav class="nav">
-            <a class="{{ 'active' if active == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Tablero</a>
-            <a class="{{ 'active' if active == 'reglas' else '' }}" href="{{ url_for('reglas') }}">Reglas</a>
-            <a class="{{ 'active' if active == 'evaluar' else '' }}" href="{{ url_for('evaluar') }}">Evaluar decisión</a>
-            <a class="{{ 'active' if active == 'whatif' else '' }}" href="{{ url_for('whatif') }}">Escenarios</a>
-            <a class="{{ 'active' if active == 'retroalimentacion' else '' }}" href="{{ url_for('retroalimentacion') }}">Retroalimentación</a>
-            <a class="{{ 'active' if active == 'reportes' else '' }}" href="{{ url_for('reportes') }}">Reportes</a>
+            {% if puede('dashboard') %}<a class="{{ 'active' if active == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Tablero</a>{% endif %}
+            {% if puede('usuarios') %}<a class="{{ 'active' if active == 'usuarios' else '' }}" href="{{ url_for('usuarios') }}">Usuarios</a>{% endif %}
+            {% if puede('reglas') %}<a class="{{ 'active' if active == 'reglas' else '' }}" href="{{ url_for('reglas') }}">Reglas</a>{% endif %}
+            {% if puede('evaluar') %}<a class="{{ 'active' if active == 'evaluar' else '' }}" href="{{ url_for('evaluar') }}">Evaluar decisión</a>{% endif %}
+            {% if puede('whatif') %}<a class="{{ 'active' if active == 'whatif' else '' }}" href="{{ url_for('whatif') }}">Escenarios</a>{% endif %}
+            {% if puede('retroalimentacion') %}<a class="{{ 'active' if active == 'retroalimentacion' else '' }}" href="{{ url_for('retroalimentacion') }}">Retroalimentación</a>{% endif %}
+            {% if puede('reportes') %}<a class="{{ 'active' if active == 'reportes' else '' }}" href="{{ url_for('reportes') }}">Reportes</a>{% endif %}
+            {% if puede('auditoria') %}<a class="{{ 'active' if active == 'auditoria' else '' }}" href="{{ url_for('auditoria') }}">Auditoría</a>{% endif %}
         </nav>
     </aside>
 
@@ -31,8 +34,15 @@
                 <p class="eyebrow">Arquitectura de Inteligencia Organizacional</p>
                 <h1>{% block title %}Nexus-Corp SDBCC{% endblock %}</h1>
             </div>
-            <span class="status-pill">Prototipo universitario</span>
+            <div class="user-box">
+                <span class="status-pill">{{ usuario_actual.nombre }}</span>
+                <small>{{ usuario_actual.rol }}</small>
+                <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+            </div>
         </header>
+    {% else %}
+    <main class="login-content">
+    {% endif %}
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}

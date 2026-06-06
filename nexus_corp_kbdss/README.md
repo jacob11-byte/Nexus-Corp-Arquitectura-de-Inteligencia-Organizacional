@@ -38,6 +38,24 @@ http://127.0.0.1:5000
 
 El archivo `data/reglas.xml` incluye reglas iniciales para Inventario, Ventas, Logística y Finanzas. También existen datos base en `data/decisiones.xml` y `data/retroalimentacion.xml` para mostrar indicadores y reportes desde el primer uso.
 
+## Acceso al sistema
+
+El sistema ahora requiere inicio de sesión. Los usuarios de prueba son:
+
+| Usuario | Contraseña | Rol |
+| --- | --- | --- |
+| admin | admin123 | Administrador del sistema |
+| conocimiento | conocimiento123 | Administrador de conocimiento |
+| experto | experto123 | Experto |
+| gerente | gerente123 | Decisor o gerente |
+| analista | analista123 | Analista |
+
+Cada rol ve solo los módulos que le corresponden. El administrador puede gestionar usuarios y revisar auditoría; el administrador de conocimiento y el experto trabajan con reglas; el gerente evalúa decisiones y escenarios; el analista revisa reportes y retroalimentación.
+
+## Auditoría y seguridad
+
+El archivo `data/usuarios.xml` almacena usuarios, roles, áreas y estado de acceso. Las contraseñas se guardan como resumen SHA-256 para el prototipo. El archivo `data/auditoria.xml` registra acciones importantes como inicio de sesión, creación de reglas, evaluación de decisiones, retroalimentación y creación de usuarios.
+
 ## Base de datos recomendada
 
 La base de datos recomendada es SQLite. Se integraría como un archivo local en `data/nexus_corp.db`, usando un módulo nuevo llamado `repositorio_datos.py` para centralizar consultas y registros. La propuesta completa está en `PROPUESTA_BASE_DATOS.md`.

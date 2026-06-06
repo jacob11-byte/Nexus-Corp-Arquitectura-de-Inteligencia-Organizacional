@@ -5,3 +5,41 @@ Press CTRL+C to quit
  * Debugger is active!
  * Debugger PIN: 121-732-337
 127.0.0.1 - - [05/Jun/2026 19:31:31] "GET /?fecha_inicio=2026-06-01&fecha_fin=2026-06-30 HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:33:50] "GET /reglas HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:33:51] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:33:51] "GET /static/js/script.js HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:33:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:33:53] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:33:53] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:02] "GET /reportes HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:34:02] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:02] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:04] "GET /whatif HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:34:04] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:04] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:05] "GET /evaluar HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:34:06] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:06] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:07] "GET /evaluar HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:34:07] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:07] "GET /static/js/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:08] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Jun/2026 19:34:08] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [05/Jun/2026 19:34:08] "GET /static/js/script.js HTTP/1.1" 304 -
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\motor_reglas.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+ * Detected change in 'C:\\Users\\jacob\\OneDrive\\Desktop\\GIT - REPO\\Nexus-Corp-Arquitectura-de-Inteligencia-Organizacional\\nexus_corp_kbdss\\app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 121-732-337
+127.0.0.1 - - [05/Jun/2026 19:51:23] "GET /login HTTP/1.1" 200 -

@@ -14,6 +14,13 @@
                 {% endfor %}
             </select>
         </label>
+        <label>¿Fue útil la recomendación?
+            <select name="util" required>
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+                <option value="Parcialmente">Parcialmente</option>
+            </select>
+        </label>
         <label>Calificación de utilidad
             <select name="calificacion" required>
                 <option value="5">5 - Muy útil</option>
@@ -23,8 +30,14 @@
                 <option value="1">1 - No útil</option>
             </select>
         </label>
+        <label>Resultado de la decisión tomada
+            <input name="resultado" required placeholder="Ej. Se realizó reabastecimiento">
+        </label>
         <label>Comentario
             <textarea name="comentario" rows="4" required placeholder="Explique si la recomendación ayudó a la decisión"></textarea>
+        </label>
+        <label>Sugerencia para mejorar la regla
+            <textarea name="sugerencia" rows="3" placeholder="Ej. Ajustar el nivel mínimo según temporada"></textarea>
         </label>
         <button type="submit">Guardar retroalimentación</button>
     </form>
@@ -38,8 +51,10 @@
             {% for item in retroalimentaciones %}
                 <article class="feedback-item">
                     <strong>Decisión #{{ item.decision_id }} - {{ item.calificacion }}/5</strong>
-                    <span>{{ item.fecha }}</span>
+                    <span>{{ item.fecha }} · Útil: {{ item.util or "No indicado" }}</span>
                     <p>{{ item.comentario }}</p>
+                    {% if item.resultado %}<p><strong>Resultado:</strong> {{ item.resultado }}</p>{% endif %}
+                    {% if item.sugerencia %}<p><strong>Sugerencia:</strong> {{ item.sugerencia }}</p>{% endif %}
                 </article>
             {% else %}
                 <p class="empty">Aún no hay retroalimentaciones registradas.</p>
