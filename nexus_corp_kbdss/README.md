@@ -56,15 +56,11 @@ Cada rol ve solo los módulos que le corresponden. El administrador puede gestio
 
 El archivo `data/usuarios.xml` almacena usuarios, roles, áreas y estado de acceso. Las contraseñas se guardan como resumen SHA-256 para el prototipo. El archivo `data/auditoria.xml` registra acciones importantes como inicio de sesión, creación de reglas, evaluación de decisiones, retroalimentación y creación de usuarios.
 
-## Imagen corporativa
-
-El administrador puede subir el logo o imagen de la empresa desde el módulo `Usuarios`. La imagen se guarda en `static/uploads/` y la referencia queda registrada en `data/configuracion.xml`. El logo aparece automáticamente en el inicio de sesión y en el menú lateral del sistema.
-
 ## Despliegue en Vercel
 
 El repositorio incluye `vercel.json`, `requirements.txt` y `api/index.py` en la raíz para que Vercel pueda encontrar la aplicación Flask. En Vercel se debe desplegar desde la raíz del repositorio, no solo desde la carpeta `nexus_corp_kbdss`.
 
-Nota: Vercel usa funciones serverless. Los XML y logos subidos durante la ejecución se guardan temporalmente en `/tmp`, por lo que sirven para demostración, pero no como almacenamiento permanente. Para persistencia real conviene usar SQLite fuera de Vercel, PostgreSQL, Supabase o Vercel Blob.
+Nota: Vercel usa funciones serverless. Los XML escritos durante la ejecución se guardan temporalmente en `/tmp`, por lo que sirven para demostración, pero no como almacenamiento permanente. Para persistencia real conviene usar SQLite fuera de Vercel, PostgreSQL o Supabase.
 
 ## Base de datos recomendada
 
